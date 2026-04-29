@@ -1,0 +1,6 @@
+v1.1 - 29.04.2026
+Added:
+    - File: README.txt
+    - File: LICENSE.txt
+    - File: CHANGELOG.txt
+    - World check to hinder people from teleporting across worlds

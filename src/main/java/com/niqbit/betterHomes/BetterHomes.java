@@ -138,7 +138,7 @@ public class BetterHomes extends JavaPlugin {
         return 1;
     }
 
-    private static int handleHome(CommandContext<CommandSourceStack> ctx, String homeName) {
+    private int handleHome(CommandContext<CommandSourceStack> ctx, String homeName) {
         CommandSourceStack source = ctx.getSource();
         if (!(source.getSender() instanceof Player player)) {
             source.getSender().sendMessage("Only players can use this.");
@@ -154,6 +154,15 @@ public class BetterHomes extends JavaPlugin {
             float yaw = (Float) home.get("yaw");
             float pitch = (Float) home.get("pitch");
             String world = (String) home.get("world");
+
+            boolean isCrossAllowed = getConfig().getBoolean("allow-cross-world-teleportation");
+
+            if(!isCrossAllowed) {
+                if (!player.getWorld().getName().equals(world)) {
+                        player.sendMessage(Component.text("You need to be in the same world to teleport to your home.", NamedTextColor.RED));
+                        return 0;
+                }
+            }
 
             Location location = new Location(
                     Bukkit.getWorld(world),
