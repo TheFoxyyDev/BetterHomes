@@ -4,3 +4,7 @@ Added:
     - File: LICENSE.txt
     - File: CHANGELOG.txt
     - World check to hinder people from teleporting across worlds
+
+v1.2 - 29.04.2026
+Added:
+    - You can now overwrite a Home even when you are at the Homes limit

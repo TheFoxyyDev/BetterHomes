@@ -18,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.niqbit.betterHomes.databases.PlayerHomes;
 
@@ -103,28 +104,36 @@ public class BetterHomes extends JavaPlugin {
             return 0;
         }
 
-        int homeCount = PlayerHomes.countHomes(player.getUniqueId());
-        int maxHomes = getConfig().getInt("max-homes");
-        if (homeCount >= maxHomes) {
-            player.sendMessage(
-                    Component.text("You reached your Homes limit of " + maxHomes + "! ", NamedTextColor.RED)
-                            .append(Component.text("Try deleting a home using ", NamedTextColor.GRAY))
-                            .append(Component.text("/delhome <homename>", NamedTextColor.WHITE))
-                                .clickEvent(ClickEvent.suggestCommand("/delhome "))
-                                .hoverEvent(HoverEvent.showText(Component.text("Click to auto-fill command")))
-            );
-            return 0;
-        }
+        UUID uuid = player.getUniqueId();
 
-        if (PlayerHomes.homeExists(player.getUniqueId(), homeName)) {
-            int delStatus = PlayerHomes.deleteHome(player.getUniqueId(), homeName);
-            if (delStatus != 0 && delStatus != 1) {
-                player.sendMessage(Component.text("Error overwriting home. Please report this", NamedTextColor.RED));
+        int homeCount = PlayerHomes.countHomes(uuid);
+        int maxHomes = getConfig().getInt("max-homes");
+
+        if (PlayerHomes.homeExists(uuid, homeName)) {
+            if (homeCount - 1 >= maxHomes) {
+                player.sendMessage(Component.text("Maximum Homes limit of " + maxHomes + " reached!", NamedTextColor.RED)
+                                            .append(Component.text("Please try deleting a Home first using ", NamedTextColor.GRAY)
+                                            .append(Component.text("/delhome", NamedTextColor.WHITE)
+                                                    .hoverEvent(HoverEvent.showText(Component.text("Click to auto-fill command."))))
+                                                    .clickEvent(ClickEvent.suggestCommand("/delhome ")))
+                );
+                return 0;
+            }
+
+            PlayerHomes.deleteHome(uuid, homeName);
+        } else {
+            if (homeCount >= maxHomes) {
+                player.sendMessage(Component.text("Maximum Homes limit of " + maxHomes + " reached!", NamedTextColor.RED)
+                        .append(Component.text("Please try deleting a Home first using ", NamedTextColor.GRAY)
+                                .append(Component.text("/delhome", NamedTextColor.WHITE)
+                                        .hoverEvent(HoverEvent.showText(Component.text("Click to auto-fill command."))))
+                                .clickEvent(ClickEvent.suggestCommand("/delhome ")))
+                );
                 return 0;
             }
         }
 
-        int status = PlayerHomes.createHome(player.getUniqueId(), homeName, player.getWorld(), player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch());
+        int status = PlayerHomes.createHome(uuid, homeName, player.getWorld(), player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch());
 
         if (status < 0) {
             player.sendMessage(Component.text("Something went wrong during the creating of your home. Please report this", NamedTextColor.RED));
