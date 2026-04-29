@@ -1,0 +1,15 @@
+name: BetterHomes
+description: $description
+version: '${version}'
+
+main: com.niqbit.betterHomes.BetterHomes
+api-version: '1.21.11'
+load: POSTWORLD
+
+authors: [ TheFoxyyDev ]
+website: niqbit.com
+
+commands:
+  home:
+    description: Teleport to your homes
+    usage: /home [homename]
