@@ -22,7 +22,7 @@ Exampe: `/home myhome`
 
 ### Deleting a prefiously set Home
 
-`/delhome <required,Word:homename>
+`/delhome <required,Word:homename>`
 
 With the permission `betterhomes.user.delhome`, Users can delete Homes they previously set with the homename
 
